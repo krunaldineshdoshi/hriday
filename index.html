@@ -3,33 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Hriday!</title>
+    <title>Happy Birthday</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; background: #ffecb3; margin: 0; }
-        .container { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-        .card { max-width: 400px; width: 90%; }
-        .button { padding: 15px 20px; font-size: 18px; color: white; background: #ff4081; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
-        .button:hover { background: #e91e63; }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, white, red);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            animation: floatUp 4s ease-in-out infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-300px); opacity: 1; }
+            100% { transform: translateY(-600px); opacity: 0; }
+        }
+        .balloon::after {
+            content: '\1F4A5';
+            position: absolute;
+            font-size: 40px;
+            opacity: 0;
+            animation: burst 4s infinite;
+        }
+        @keyframes burst {
+            90% { opacity: 0; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.5); }
+        }
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(45deg, gold, orange);
+            border-radius: 50%;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+        }
+        .streamer {
+            position: absolute;
+            width: 6px;
+            height: 90px;
+            background: linear-gradient(to bottom, blue, purple);
+            border-radius: 3px;
+            animation: streamerFall 4s linear infinite;
+        }
+        @keyframes streamerFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(600px) rotate(180deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
-
-    <!-- Greeting Card Image -->
     <div class="container">
-        <img src="IMG-20250226-WA0005.jpg" class="card" alt="Happy Birthday Hriday">
-        <button class="button" onclick="goToScratchCard()">Reveal Surprise!</button>
+        <img src="IMG-20250226-WA0005.jpg" alt="Happy Birthday Card">
+        <audio autoplay loop>
+            <source src="happy_birthday.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
     </div>
-
-    <!-- Background Music -->
-    <audio autoplay loop>
-        <source src="https://www.example.com/birthday-song.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
-        function goToScratchCard() {
-            window.location.href = "scratch.html"; // Redirect to scratch card page
+        function createBalloon() {
+            const balloon = document.createElement("div");
+            balloon.className = "balloon";
+            balloon.style.left = Math.random() * window.innerWidth + "px";
+            balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(balloon);
+            setTimeout(() => { document.body.removeChild(balloon); }, 4000);
         }
-    </script>
+        setInterval(createBalloon, 600);
 
+        function createConfetti() {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = Math.random() * window.innerWidth + "px";
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(confetti);
+            setTimeout(() => { document.body.removeChild(confetti); }, 3000);
+        }
+        setInterval(createConfetti, 250);
+
+        function createStreamer() {
+            const streamer = document.createElement("div");
+            streamer.className = "streamer";
+            streamer.style.left = Math.random() * window.innerWidth + "px";
+            streamer.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(streamer);
+            setTimeout(() => { document.body.removeChild(streamer); }, 4000);
+        }
+        setInterval(createStreamer, 900);
+    </script>
 </body>
 </html>
