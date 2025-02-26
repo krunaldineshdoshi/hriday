@@ -1,70 +1,35 @@
-##TEST##
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎁 The Joy of Giving 🎁</title>
+    <title>Happy Birthday Hriday!</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;600&display=swap');
-
-        body {
-            font-family: 'Dancing Script', cursive;
-            text-align: center;
-            padding: 20px;
-            background: #87CEEB; /* Sky Blue */
-            color: white;
-        }
-        .container {
-            background: #4682B4; /* Slightly Darker Blue */
-            padding: 30px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 20px;
-            max-width: 80%;
-        }
-        h1 {
-            font-size: 2.8em;
-            margin-bottom: 10px;
-        }
-        p {
-            font-size: 1.5em;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .button {
-            background: #FFD700;
-            color: black;
-            padding: 12px 20px;
-            font-size: 1.4em;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        .button:hover {
-            background: #FFA500;
-        }
+        body { text-align: center; font-family: Arial, sans-serif; background: #ffecb3; margin: 0; }
+        .container { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .card { max-width: 400px; width: 90%; }
+        .button { padding: 15px 20px; font-size: 18px; color: white; background: #ff4081; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        .button:hover { background: #e91e63; }
     </style>
 </head>
 <body>
+
+    <!-- Greeting Card Image -->
     <div class="container">
-        <h1>🎁 The Joy of Giving 🎁</h1>
-        <p>
-            Birthdays are not just about receiving gifts, but also about spreading love and kindness.  
-            A simple act of generosity can brighten someone’s day and create ripples of positivity.  
-            Hriday’s birthday is a special opportunity to celebrate by sharing joy with those in need.  
-            <br><br>
-            Whether it's **supporting children's education**, **caring for the elderly**, or **helping animals in shelters**,  
-            your kindness makes a real difference.  
-            <br><br>
-            Click below to uncover a special surprise and experience the happiness of giving! 🎉
-        </p>
-        <a href="scratch_card.html" class="button">🎂 Celebrate with Hriday 🎂</a>
+        <img src="IMG-20250226-WA0005.jpg" class="card" alt="Happy Birthday Hriday">
+        <button class="button" onclick="goToScratchCard()">Reveal Surprise!</button>
     </div>
+
+    <!-- Background Music -->
+    <audio autoplay loop>
+        <source src="https://www.example.com/birthday-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function goToScratchCard() {
+            window.location.href = "scratch.html"; // Redirect to scratch card page
+        }
+    </script>
+
 </body>
 </html>
