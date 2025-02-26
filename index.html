@@ -18,6 +18,8 @@
         .container {
             position: relative;
             text-align: center;
+            max-width: 90vw;
+            max-height: 90vh;
         }
         img {
             max-width: 100%;
@@ -25,8 +27,8 @@
         }
         .balloon {
             position: absolute;
-            width: 60px;
-            height: 80px;
+            width: 5vw;
+            height: 7vw;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, white, red);
             box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
@@ -34,13 +36,13 @@
         }
         @keyframes floatUp {
             0% { transform: translateY(0); opacity: 1; }
-            50% { transform: translateY(-300px); opacity: 1; }
-            100% { transform: translateY(-600px); opacity: 0; }
+            50% { transform: translateY(-30vh); opacity: 1; }
+            100% { transform: translateY(-60vh); opacity: 0; }
         }
         .balloon::after {
             content: '\1F4A5';
             position: absolute;
-            font-size: 40px;
+            font-size: 3vw;
             opacity: 0;
             animation: burst 4s infinite;
         }
@@ -50,32 +52,46 @@
         }
         .confetti {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 1vw;
+            height: 1vw;
             background: linear-gradient(45deg, gold, orange);
             border-radius: 50%;
             animation: fall 3s linear infinite;
         }
         @keyframes fall {
             0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(60vh) rotate(360deg); opacity: 0; }
         }
         .streamer {
             position: absolute;
-            width: 6px;
-            height: 90px;
+            width: 0.5vw;
+            height: 10vh;
             background: linear-gradient(to bottom, blue, purple);
             border-radius: 3px;
             animation: streamerFall 4s linear infinite;
         }
         @keyframes streamerFall {
             0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(600px) rotate(180deg); opacity: 0; }
+            100% { transform: translateY(60vh) rotate(180deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        
+        <h1>🎁 The Joy of Giving 🎁</h1>
+        <p>
+            Birthdays are not just about receiving gifts, but also about spreading love and kindness.  
+            A simple act of generosity can brighten someone’s day and create ripples of positivity.  
+            Hriday’s birthday is a special opportunity to celebrate by sharing joy with those in need.  
+            <br><br>
+            Whether it's **supporting children's education**, **caring for the elderly**, or **helping animals in shelters**,  
+            your kindness makes a real difference.  
+            <br><br>
+            Click below to uncover a special surprise and experience the happiness of giving! 🎉
+        </p>
+        <a href="scratch_card.html" class="button">🎂 Celebrate with Hriday 🎂</a>
+
         <img src="IMG-20250226-WA0005.jpg" alt="Happy Birthday Card">
         <audio autoplay loop>
             <source src="happy_birthday.mp3" type="audio/mp3">
@@ -86,7 +102,7 @@
         function createBalloon() {
             const balloon = document.createElement("div");
             balloon.className = "balloon";
-            balloon.style.left = Math.random() * window.innerWidth + "px";
+            balloon.style.left = Math.random() * 90 + "vw";
             balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
             document.body.appendChild(balloon);
             setTimeout(() => { document.body.removeChild(balloon); }, 4000);
@@ -96,7 +112,7 @@
         function createConfetti() {
             const confetti = document.createElement("div");
             confetti.className = "confetti";
-            confetti.style.left = Math.random() * window.innerWidth + "px";
+            confetti.style.left = Math.random() * 90 + "vw";
             confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
             document.body.appendChild(confetti);
             setTimeout(() => { document.body.removeChild(confetti); }, 3000);
@@ -106,7 +122,7 @@
         function createStreamer() {
             const streamer = document.createElement("div");
             streamer.className = "streamer";
-            streamer.style.left = Math.random() * window.innerWidth + "px";
+            streamer.style.left = Math.random() * 90 + "vw";
             streamer.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
             document.body.appendChild(streamer);
             setTimeout(() => { document.body.removeChild(streamer); }, 4000);
