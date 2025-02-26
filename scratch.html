@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch to Reveal Your Gift!</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background: #ffe0b2; margin: 0; }
+        .container { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .scratch-card { position: relative; width: 300px; height: 200px; background: gray; border-radius: 10px; }
+        .scratch-cover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: silver; cursor: pointer; }
+        .button { padding: 15px 20px; font-size: 18px; color: white; background: #ff4081; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        .button:hover { background: #e91e63; }
+    </style>
+</head>
+<body>
+
+    <!-- Scratch Card -->
+    <div class="container">
+        <h1>🎁 Scratch to Reveal Your Gift! 🎉</h1>
+        <div class="scratch-card">
+            <div class="scratch-cover" id="scratch-cover"></div>
+            <img src="https://source.unsplash.com/300x200/?gift,celebration" width="100%" height="100%" alt="Surprise Gift">
+        </div>
+        <button class="button" onclick="goToForm()">Submit Your Wish</button>
+    </div>
+
+    <script>
+        document.getElementById("scratch-cover").addEventListener("click", function() {
+            this.style.opacity = "0"; // Simulate scratch-off effect
+        });
+
+        function goToForm() {
+            window.location.href = "https://forms.gle/YOUR_GOOGLE_FORM_LINK"; // Redirect to Google Form
+        }
+    </script>
+
+</body>
+</html>
