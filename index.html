@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Hriday!</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background: #ffecb3; margin: 0; }
+        .container { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .card { max-width: 400px; width: 90%; }
+        .button { padding: 15px 20px; font-size: 18px; color: white; background: #ff4081; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        .button:hover { background: #e91e63; }
+    </style>
+</head>
+<body>
+
+    <!-- Greeting Card Image -->
+    <div class="container">
+        <img src="IMG-20250226-WA0005.jpg" class="card" alt="Happy Birthday Hriday">
+        <button class="button" onclick="goToScratchCard()">Reveal Surprise!</button>
+    </div>
+
+    <!-- Background Music -->
+    <audio autoplay loop>
+        <source src="https://www.example.com/birthday-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function goToScratchCard() {
+            window.location.href = "scratch.html"; // Redirect to scratch card page
+        }
+    </script>
+
+</body>
+</html>
