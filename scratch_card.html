@@ -66,10 +66,34 @@
         .message-button:hover {
             background: #FF4500;
         }
+
+        .confetti {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: #ff6347;
+            border-radius: 50%;
+            opacity: 0;
+            animation: confettiFall 2s forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50% + 100px), calc(-50% + 400px)) scale(0.5);
+            }
+        }
     </style>
 </head>
 <body>
     <audio id="birthdayAudio" src="happy-birthday-background-music-298561.mp3" autoplay loop></audio>
+    <audio id="scratchSound" src="scratch-sound.mp3"></audio>
 
     <div class="overlay">
         <h1>🎉 Hriday's Birthday Scratch Card 🎉</h1>
@@ -91,6 +115,14 @@
     </div>
 
     <script>
+        const amounts = [100, 150, 200, 250];
+        const causes = {
+            "education": "Kids' Education",
+            "elderly": "Elderly Care",
+            "animals": "Animal Shelter",
+            "general": "General Donation"
+        };
+
         let isScratching = false;
         let scratchedArea = 0;
         const scratchRadius = 20;  // Size of the scratch area
@@ -100,17 +132,7 @@
         const ctx = canvas.getContext("2d");
         const scratchMessage = document.getElementById("scratchMessage");
         const amountContainer = document.getElementById("amount");
-
-        // Get the selected cause and donation amount from sessionStorage
-        const selectedCauseKey = sessionStorage.getItem("selectedCause");
-        const selectedCause = {
-            "education": "Kids' Education",
-            "elderly": "Elderly Care",
-            "animals": "Animal Shelter",
-            "general": "General Donation"
-        }[selectedCauseKey] || "Kids' Education";  // Default value if not set
-
-        const randomAmount = sessionStorage.getItem("donationAmount") || 100; // Default amount
+        const scratchSound = document.getElementById("scratchSound");
 
         // Initialize canvas with grey cover and hidden content
         function initScratchCard() {
@@ -119,7 +141,7 @@
 
             ctx.fillStyle = "#000"; // Hidden content (donation details)
             ctx.font = "30px Arial";
-            ctx.fillText("🎁 Scratch to Reveal 🎁", 60, 190);
+            ctx.fillText("Scratch to Reveal", 90, 190);
         }
 
         // Function to start scratching
@@ -137,8 +159,8 @@
         // Function to track mouse or touch movement for scratching
         function scratch(event) {
             const rect = canvas.getBoundingClientRect();
-            const x = (event.clientX || event.touches[0].clientX) - rect.left;
-            const y = (event.clientY || event.touches[0].clientY) - rect.top;
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
 
             ctx.globalCompositeOperation = "destination-out"; // Erase the cover
             ctx.beginPath();
@@ -147,16 +169,21 @@
 
             scratchedArea += scratchRadius * scratchRadius * Math.PI;
 
-            const totalCanvasArea = canvas.width * canvas.height;
-            const thresholdArea = (scratchThreshold / 100) * totalCanvasArea;
+            // Play sound on each scratch
+            scratchSound.play();
 
-            if (scratchedArea > thresholdArea) {
+            if (scratchedArea > (canvas.width * canvas.height * scratchThreshold) / 100) {
                 revealDonation();
+                showConfetti(); // Show confetti after scratching
             }
         }
 
         // Function to reveal donation amount and cause
         function revealDonation() {
+            const selectedCauseKey = sessionStorage.getItem("selectedCause") || "education"; // Default cause
+            const selectedCause = causes[selectedCauseKey];
+            const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
+
             document.getElementById("donationAmount").innerText = randomAmount;
             document.getElementById("donationCause").innerText = selectedCause;
             amountContainer.classList.remove("hidden");
@@ -164,16 +191,20 @@
             document.querySelector(".scratch-card-container").style.display = "none";
         }
 
-        // Function to send WhatsApp message with the revealed amount and cause
-        function sendMessage(phone) {
-            const amount = document.getElementById("donationAmount").innerText;
-            const cause = document.getElementById("donationCause").innerText;
-            const message = `Hi! Thank you for celebrating Hriday's birthday. Kindly donate ₹${amount} for ${cause} on our behalf. Blessings & wishes for Hriday!`;
-            window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-        }
+        // Function to show confetti animation
+        function showConfetti() {
+            const confetti = document.createElement("div");
+            confetti.classList.add("confetti");
+            document.body.appendChild(confetti);
 
-        // Initialize scratch card
-        initScratchCard();
+            setTimeout(() => {
+                confetti.classList.add("animate");
+            }, 100);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
+        }
 
         // Event listeners for mouse and touch events
         canvas.addEventListener("mousedown", startScratching);
@@ -185,6 +216,17 @@
         canvas.addEventListener("touchstart", startScratching);
         canvas.addEventListener("touchmove", scratch);
         canvas.addEventListener("touchend", stopScratching);
+
+        // Function to send WhatsApp message
+        function sendMessage(phone) {
+            const amount = document.getElementById("donationAmount").innerText;
+            const cause = document.getElementById("donationCause").innerText;
+            const message = `Hi! Thank you for celebrating Hriday's birthday. Kindly donate ₹${amount} for ${cause} on our behalf. Blessings & wishes for Hriday!`;
+            window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        }
+
+        // Initialize scratch card
+        initScratchCard();
     </script>
 </body>
 </html>
