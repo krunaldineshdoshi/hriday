@@ -66,13 +66,6 @@
         .message-button:hover {
             background: #FF4500;
         }
-
-        #donationText {
-            font-size: 24px;
-            color: black;
-            font-weight: bold;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -85,7 +78,11 @@
 
         <div class="scratch-card-container">
             <canvas id="scratchCanvas" width="400" height="400"></canvas>
-            <div id="donationText" class="hidden"></div>
+            <div id="scratchMessage" class="hidden">🎁 You Win! 🎁</div>
+        </div>
+
+        <div id="amount" class="hidden">
+            <p>🎁 We will donate ₹<span id="donationAmount"></span> for <span id="donationCause"></span> 🎁</p>
         </div>
 
         <p>Send a heartfelt message to:</p>
@@ -94,22 +91,26 @@
     </div>
 
     <script>
-        const amounts = [100, 150, 200, 250];
-        const causes = {
+        let isScratching = false;
+        let scratchedArea = 0;
+        const scratchRadius = 20;  // Size of the scratch area
+        const scratchThreshold = 70;  // Percentage of area to reveal message
+
+        const canvas = document.getElementById("scratchCanvas");
+        const ctx = canvas.getContext("2d");
+        const scratchMessage = document.getElementById("scratchMessage");
+        const amountContainer = document.getElementById("amount");
+
+        // Get the selected cause and donation amount from sessionStorage
+        const selectedCauseKey = sessionStorage.getItem("selectedCause");
+        const selectedCause = {
             "education": "Kids' Education",
             "elderly": "Elderly Care",
             "animals": "Animal Shelter",
             "general": "General Donation"
-        };
+        }[selectedCauseKey] || "Kids' Education";  // Default value if not set
 
-        let isScratching = false;
-        let scratchedArea = 0;
-        const scratchRadius = 20;  // Size of the scratch area
-        const scratchThreshold = 60;  // Percentage of area to reveal message
-
-        const canvas = document.getElementById("scratchCanvas");
-        const ctx = canvas.getContext("2d");
-        const donationText = document.getElementById("donationText");
+        const randomAmount = sessionStorage.getItem("donationAmount") || 100; // Default amount
 
         // Initialize canvas with grey cover and hidden content
         function initScratchCard() {
@@ -146,34 +147,33 @@
 
             scratchedArea += scratchRadius * scratchRadius * Math.PI;
 
-            // Reveal donation content once threshold is scratched
-            if (scratchedArea > (canvas.width * canvas.height * scratchThreshold) / 100) {
+            const totalCanvasArea = canvas.width * canvas.height;
+            const thresholdArea = (scratchThreshold / 100) * totalCanvasArea;
+
+            if (scratchedArea > thresholdArea) {
                 revealDonation();
             }
         }
 
         // Function to reveal donation amount and cause
         function revealDonation() {
-            const selectedCauseKey = sessionStorage.getItem("selectedCause") || "education"; // Default cause
-            const selectedCause = causes[selectedCauseKey];
-            const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
-
-            // Reveal the donation amount and cause inside the scratch card
-            donationText.innerHTML = `🎁 ₹${randomAmount} for ${selectedCause} 🎁`;
-            donationText.classList.remove("hidden");
-
-            // Hide the scratch area once revealed
+            document.getElementById("donationAmount").innerText = randomAmount;
+            document.getElementById("donationCause").innerText = selectedCause;
+            amountContainer.classList.remove("hidden");
+            scratchMessage.classList.remove("hidden");
             document.querySelector(".scratch-card-container").style.display = "none";
         }
 
         // Function to send WhatsApp message with the revealed amount and cause
         function sendMessage(phone) {
-            const amount = donationText.innerText.match(/₹(\d+)/)[1];  // Extract the amount
-            const cause = donationText.innerText.split("for ")[1].split(" 🎁")[0];  // Extract the cause
-
+            const amount = document.getElementById("donationAmount").innerText;
+            const cause = document.getElementById("donationCause").innerText;
             const message = `Hi! Thank you for celebrating Hriday's birthday. Kindly donate ₹${amount} for ${cause} on our behalf. Blessings & wishes for Hriday!`;
             window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
         }
+
+        // Initialize scratch card
+        initScratchCard();
 
         // Event listeners for mouse and touch events
         canvas.addEventListener("mousedown", startScratching);
@@ -185,9 +185,6 @@
         canvas.addEventListener("touchstart", startScratching);
         canvas.addEventListener("touchmove", scratch);
         canvas.addEventListener("touchend", stopScratching);
-
-        // Initialize scratch card
-        initScratchCard();
     </script>
 </body>
 </html>
