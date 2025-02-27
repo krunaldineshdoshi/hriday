@@ -38,13 +38,18 @@
         .scratch-card-container {
             position: relative;
             display: inline-block;
-            margin-top: 20px;
             cursor: pointer;
+            margin-top: 20px;
         }
 
-        canvas {
+        #scratchCanvas {
+            background: gray;
             border-radius: 10px;
-            border: 2px solid #000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .hidden {
+            display: none;
         }
 
         .message-button {
@@ -63,15 +68,14 @@
             background: #FF4500;
         }
 
-        .hidden {
-            display: none;
+        #amount {
+            opacity: 0;
+            transition: opacity 1s ease-in-out; /* Add fade effect */
         }
 
         #scratchMessage {
-            font-size: 1.5em;
-            color: #FFA500;
-            margin-top: 20px;
-            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in-out; /* Add fade effect */
         }
     </style>
 </head>
@@ -84,8 +88,8 @@
         <p>🎈 Scratch below to see the donation amount and cause we will donate on your behalf!</p>
 
         <div class="scratch-card-container">
-            <canvas id="scratchCanvas" width="400" height="200"></canvas>
-            <div id="scratchMessage" class="hidden">You Win! 🎁</div>
+            <canvas id="scratchCanvas" width="400" height="400"></canvas>
+            <div id="scratchMessage" class="hidden">🎁 You Win! 🎁</div>
         </div>
 
         <div id="amount" class="hidden">
@@ -106,88 +110,97 @@
             "general": "General Donation"
         };
 
+        let isScratching = false;
+        let scratchedArea = 0;
+        const scratchRadius = 20;  // Size of the scratch area
+        const scratchThreshold = 70;  // Percentage of area to reveal message
+
         const canvas = document.getElementById("scratchCanvas");
         const ctx = canvas.getContext("2d");
         const scratchMessage = document.getElementById("scratchMessage");
         const amountContainer = document.getElementById("amount");
 
-        const width = canvas.width;
-        const height = canvas.height;
-        let isScratching = false;
-        let scratchedArea = 0;
-        const scratchRadius = 20;
-        const scratchThreshold = 70; // Percentage of scratched area to reveal message
-
+        // Initialize canvas with grey cover and hidden content
         function initScratchCard() {
-            ctx.fillStyle = "#C0C0C0"; // Grey cover color
-            ctx.fillRect(0, 0, width, height); // Fill the canvas with grey
+            ctx.fillStyle = "#C0C0C0"; // Grey cover
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw the hidden content on the canvas
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = "#000"; // Hidden content (donation details)
             ctx.font = "30px Arial";
-            ctx.fillText("🎁 Scratch to reveal 🎁", 90, height / 2);
+            ctx.fillText("Scratch to Reveal", 90, 190);
         }
 
+        // Function to start scratching
         function startScratching(event) {
             if (isScratching) return;
             isScratching = true;
             scratch(event);
         }
 
+        // Function to stop scratching
         function stopScratching() {
             isScratching = false;
         }
 
+        // Function to track mouse or touch movement for scratching
         function scratch(event) {
             const rect = canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
-            ctx.globalCompositeOperation = "destination-out"; // Erase the covering
+            ctx.globalCompositeOperation = "destination-out"; // Erase the cover
             ctx.beginPath();
             ctx.arc(x, y, scratchRadius, 0, Math.PI * 2, false);
             ctx.fill();
 
             scratchedArea += scratchRadius * scratchRadius * Math.PI;
 
-            // If scratched area exceeds the threshold, reveal the donation
-            if (scratchedArea > (width * height * scratchThreshold) / 100) {
-                revealDonation();
+            // Reveal donation gradually when the scratched area exceeds the threshold
+            if (scratchedArea > (canvas.width * canvas.height * scratchThreshold) / 100) {
+                graduallyRevealDonation();
             }
         }
 
-        function revealDonation() {
+        // Function to gradually reveal donation amount and cause
+        function graduallyRevealDonation() {
             const selectedCauseKey = sessionStorage.getItem("selectedCause") || "education"; // Default cause
             const selectedCause = causes[selectedCauseKey];
             const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
 
+            // Set donation amount and cause
             document.getElementById("donationAmount").innerText = randomAmount;
             document.getElementById("donationCause").innerText = selectedCause;
+
+            // Gradually reveal the donation information with fade-in effect
             amountContainer.classList.remove("hidden");
             scratchMessage.classList.remove("hidden");
+            setTimeout(() => {
+                amountContainer.style.opacity = 1;  // Fade in the donation amount
+                scratchMessage.style.opacity = 1;  // Fade in the scratch message
+            }, 100);
         }
 
-        // Handle mouse and touch events
+        // Event listeners for mouse and touch events
         canvas.addEventListener("mousedown", startScratching);
         canvas.addEventListener("mousemove", scratch);
         canvas.addEventListener("mouseup", stopScratching);
         canvas.addEventListener("mouseout", stopScratching);
 
+        // For touch devices
         canvas.addEventListener("touchstart", startScratching);
         canvas.addEventListener("touchmove", scratch);
         canvas.addEventListener("touchend", stopScratching);
 
-        // Initialize the scratch card
-        initScratchCard();
-
-        // Function to send message
+        // Function to send WhatsApp message
         function sendMessage(phone) {
             const amount = document.getElementById("donationAmount").innerText;
             const cause = document.getElementById("donationCause").innerText;
             const message = `Hi! Thank you for celebrating Hriday's birthday. Kindly donate ₹${amount} for ${cause} on our behalf. Blessings & wishes for Hriday!`;
             window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
         }
+
+        // Initialize scratch card
+        initScratchCard();
     </script>
 </body>
 </html>
-
