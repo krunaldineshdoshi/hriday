@@ -118,7 +118,7 @@
 
             ctx.fillStyle = "#000"; // Hidden content (donation details)
             ctx.font = "30px Arial";
-            ctx.fillText("Scratch to Reveal", 90, 190);
+            ctx.fillText("🎁 Scratch to Reveal 🎁", 60, 190);
         }
 
         // Function to start scratching
@@ -136,8 +136,8 @@
         // Function to track mouse or touch movement for scratching
         function scratch(event) {
             const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
+            const x = (event.clientX || event.touches[0].clientX) - rect.left;
+            const y = (event.clientY || event.touches[0].clientY) - rect.top;
 
             ctx.globalCompositeOperation = "destination-out"; // Erase the cover
             ctx.beginPath();
