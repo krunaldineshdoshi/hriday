@@ -110,7 +110,7 @@
     <div class="overlay">
         <h1>🎉 Hriday's Birthday Scratch Card 🎉</h1>
         <p>Thank you for celebrating with Hriday! Birthdays are about spreading joy and kindness.</p>
-        <p>🎈 Scratch below to see the donation amount and cause we will donate on your behalf!</p>
+        <p id="scratchMessageText">🎈 Scratch below to see the donation amount and cause we will donate on your behalf!</p>
 
         <div class="scratch-card-container">
             <canvas id="scratchCanvas" width="400" height="400"></canvas>
@@ -148,6 +148,7 @@
         const amountContainer = document.getElementById("amount");
         const scratchSound = document.getElementById("scratchSound");
         const confettiContainer = document.getElementById("confetti-container");
+        const scratchMessageText = document.getElementById("scratchMessageText");
 
         // Initialize canvas with grey cover and hidden content
         function initScratchCard() {
@@ -186,6 +187,11 @@
 
             // Play sound on each scratch
             scratchSound.play();
+
+            // Hide the initial message once scratching starts
+            if (scratchedArea > 0) {
+                scratchMessageText.classList.add("hidden");
+            }
 
             if (scratchedArea > (canvas.width * canvas.height * scratchThreshold) / 100) {
                 revealDonation();
