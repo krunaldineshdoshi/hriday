@@ -105,7 +105,7 @@
         let isScratching = false;
         let scratchedArea = 0;
         const scratchRadius = 20;  // Size of the scratch area
-        const scratchThreshold = 70;  // Percentage of area to reveal message
+        const scratchThreshold = 60;  // Percentage of area to reveal message
 
         const canvas = document.getElementById("scratchCanvas");
         const ctx = canvas.getContext("2d");
@@ -145,6 +145,8 @@
             ctx.fill();
 
             scratchedArea += scratchRadius * scratchRadius * Math.PI;
+
+            // Reveal donation content once threshold is scratched
             if (scratchedArea > (canvas.width * canvas.height * scratchThreshold) / 100) {
                 revealDonation();
             }
